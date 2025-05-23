@@ -1,0 +1,26 @@
+.contenedor-login {
+  width: 300px;
+  margin: 50px auto;
+  padding: 25px;
+  border-radius: 10px;
+  background-color: #f2f2f2;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}

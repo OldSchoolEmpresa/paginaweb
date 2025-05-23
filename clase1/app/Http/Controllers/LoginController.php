@@ -1,34 +1,31 @@
 <?php
-namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
-use App\Models\EmpleadoCliente;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        $user = EmpleadoCliente::where('correoEmpleado', $request->correoEmpleado)->first();
+        $correo = $request->input('correoEmpleado');
+        $password = $request->input('passwordEmpleado');
 
-        if (!$user || !Hash::check($request->passwordEmpleado, $user->passwordEmpleado)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Credenciales incorrectas'
-            ], 401);
+        $usuario = DB::table('empleadocliente')->where('correoEmpleado', $correo)->first();
+
+        if (!$usuario) {
+            return response()->json(['success' => false, 'message' => 'Usuario no encontrado'], 401);
         }
 
-        $token = bin2hex(random_bytes(16));
+        if (Hash::check($password, $usuario->passwordEmpleado)) {
+            // Genera un token simple (puedes cambiar por JWT o Sanctum)
+            $token = bin2hex(random_bytes(16));
 
-        return response()->json([
-            'status' => 'success',
-            'token' => $token,
-            'user' => [
-                'id' => $user->idEmpleado,
-                'nombre' => $user->nombreEmpleado,
-                'correo' => $user->correoEmpleado
-            ]
-        ]);
+            return response()->json(['success' => true, 'token' => $token]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Contraseña incorrecta'], 401);
+        }
     }
 }
